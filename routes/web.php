@@ -13,11 +13,14 @@ Route::get('/', function () {
 });
 
 Route::get('/jobs', function () {
-    // return 'About page';
-    // return ['foo' => 'bar'];
-    return view('jobs', [
-        'jobs' => Job::all()
+    $jobs = Job::with('employer')->latest()->paginate(3);
+    return view('jobs.index', [
+        'jobs' => $jobs
     ]);
+});
+
+Route::get('/jobs/create', function () {
+   return view('jobs.create');
 });
 
 Route::get('/jobs/{id}', function ($id) {
@@ -26,9 +29,19 @@ Route::get('/jobs/{id}', function ($id) {
 
     
     // dd($job);
-    return view('job', ['job' => $job]);
+    return view('jobs.show', ['job' => $job]);
 });
 
+Route::post('/jobs', function () {
+    // dd(request()->all()); and skipping validation
+
+    Job::create([
+        'title' => request('title'),
+        'salary' => request('salary'),
+        'employer_id' => 1
+    ]);
+    return redirect('jobs');
+});
 
 // homework 1
 Route::get('/contact', function () {
@@ -44,8 +57,8 @@ Route::get('/blogs', function () {
     ]);
 });
 
-Route::get('/blogs/{id}', function ($id) {
-    $blog = Blog::find($id);
+// Route::get('/blogs/{id}', function ($id) {
+//     $blog = Blog::find($id);
 
-    return view('blog', ['blog' => $blog]);
-});
+//     return view('blog', ['blog' => $blog]);
+// });
