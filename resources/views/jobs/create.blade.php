@@ -4,7 +4,7 @@
     </x-slot>
 
     <form method="POST" action="/jobs">
-      @csrf
+        @csrf
         <div class="space-y-12">
             <div class="border-b border-gray-900/10 pb-12">
                 <h2 class="text-base/7 font-semibold text-gray-900">Create New Job</h2>
@@ -16,9 +16,13 @@
                         <div class="mt-2">
                             <div
                                 class="flex items-center rounded-md bg-white pl-3 outline-1 -outline-offset-1 outline-gray-300 focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-indigo-600">
-                                <input id="title" type="text" name="title" placeholder="Shift Leader"
-                                    class="block min-w-0 grow bg-white py-1.5 pr-3 px-3 text-base text-gray-900 placeholder:text-gray-400 focus:outline-none sm:text-sm/6" />
+                                <input id="title" type="text" name="title" id="title"
+                                    placeholder="Shift Leader"
+                                    class="block min-w-0 grow bg-white py-1.5 pr-3 px-3 text-base text-gray-900 placeholder:text-gray-400 focus:outline-none sm:text-sm/6" required />
                             </div>
+                            @error('title')
+                                <p class="text-red-500 text-xs italic font-semibold">{{ $message }}</p>
+                            @enderror
                         </div>
                     </div>
 
@@ -27,12 +31,24 @@
                         <div class="mt-2">
                             <div
                                 class="flex items-center rounded-md bg-white pl-3 outline-1 -outline-offset-1 outline-gray-300 focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-indigo-600">
-                                <input id="salary" type="text" name="salary" placeholder="60,000"
-                                    class="block min-w-0 grow bg-white py-1.5 pr-3 px-3 text-base text-gray-900 placeholder:text-gray-400 focus:outline-none sm:text-sm/6" />
+                                <input id="salary" type="text" name="salary" id="salary" placeholder="60,000"
+                                    class="block min-w-0 grow bg-white py-1.5 pr-3 px-3 text-base text-gray-900 placeholder:text-gray-400 focus:outline-none sm:text-sm/6" required/>
                             </div>
+                            @error('salary')
+                                <p class="text-red-500 text-xs italic font-semibold">{{ $message }}</p>
+                            @enderror
                         </div>
                     </div>
                 </div>
+                {{-- <div class="mt-10">
+                    @if ($errors->any())
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li class="text-red-500 italic">{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    @endif
+                </div> --}}
             </div>
         </div>
 

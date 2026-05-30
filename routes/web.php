@@ -27,13 +27,16 @@ Route::get('/jobs/{id}', function ($id) {
     // dd($id);
     $job = Job::find($id);
 
-    
     // dd($job);
     return view('jobs.show', ['job' => $job]);
 });
 
 Route::post('/jobs', function () {
     // dd(request()->all()); and skipping validation
+    request()->validate([
+        'title' => ['required', 'min:3'],
+        'salary' => ['required']
+    ]);
 
     Job::create([
         'title' => request('title'),
