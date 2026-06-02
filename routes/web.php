@@ -12,6 +12,7 @@ Route::get('/', function () {
     return view('home');
 });
 
+// index
 Route::get('/jobs', function () {
     $jobs = Job::with('employer')->latest()->paginate(3);
     return view('jobs.index', [
@@ -19,10 +20,12 @@ Route::get('/jobs', function () {
     ]);
 });
 
+// create
 Route::get('/jobs/create', function () {
-   return view('jobs.create');
+    return view('jobs.create');
 });
 
+// show
 Route::get('/jobs/{id}', function ($id) {
     // dd($id);
     $job = Job::find($id);
@@ -31,6 +34,7 @@ Route::get('/jobs/{id}', function ($id) {
     return view('jobs.show', ['job' => $job]);
 });
 
+// store in the db
 Route::post('/jobs', function () {
     // dd(request()->all()); and skipping validation
     request()->validate([
@@ -45,6 +49,45 @@ Route::post('/jobs', function () {
     ]);
     return redirect('jobs');
 });
+// edit
+Route::get('/jobs/{id}/edit', function ($id) {
+    // dd($id);
+    $job = Job::find($id);
+
+    // dd($job);
+    return view('jobs.edit', ['job' => $job]);
+});
+
+// udpate
+Route::patch('/jobs/{id}', function ($id) {
+    // validate
+    request()->validate([
+        'title' => ['required', 'min:3'],
+        'salary' => ['required']
+    ]);
+    // authorize
+
+    // update job
+    $job = Job::findOrFail($id);
+
+    // persist
+    $job->update([
+        'title' => request('title'),
+        'salary' => request('salary'),
+    ]);
+
+    // redirect
+    return redirect('/jobs/' . $job->id);
+});
+
+// destroy
+Route::delete('/jobs/{id}', function ($id) {
+    //authorize
+    // delete
+    Job::findOrFail($id)->delete();
+    // redirect
+    return redirect('/jobs/');
+});
 
 // homework 1
 Route::get('/contact', function () {
@@ -55,7 +98,7 @@ Route::get('/contact', function () {
 // blogs
 
 Route::get('/blogs', function () {
-     return view('blogs', [
+    return view('blogs', [
         'blogs' => Blog::all()
     ]);
 });
